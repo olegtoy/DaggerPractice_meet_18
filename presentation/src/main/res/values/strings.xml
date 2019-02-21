@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CleanPractice_meet_16</string>
+    <string name="temp">Температура </string>
+    <string name="humidity">Влажность </string>
+    <string name="pressure">Давление </string>
+    <string name="temp_min">Минимальная температура </string>
+    <string name="temp_max">Максимальная температура </string>
+    <string name="wind_speed">Скорость ветра </string>
+</resources>
