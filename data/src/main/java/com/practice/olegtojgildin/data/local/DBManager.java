@@ -16,37 +16,20 @@ import com.practice.olegtojgildin.data.entity.WeatherDayModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Created by olegtojgildin on 01/02/2019.
  */
 
 public class DBManager {
     private DbHelper dbHelper;
-    private  OnForecastsReceivedListener mCallback;
 
-    private static volatile DBManager INSTANCE;
-
-    public static DBManager getInstance(final Context context, final OnForecastsReceivedListener callback) {
-        DBManager instance = INSTANCE;
-        if (instance == null) {
-            synchronized (DBManager.class) {
-                instance = INSTANCE;
-                if (instance == null) {
-                    instance = INSTANCE = new DBManager(context,callback);
-                }
-            }
-        }
-        return instance;
-    }
+    @Inject
     public DBManager(Context context) {
         this.dbHelper = new DbHelper(context);
     }
 
-    public DBManager(Context context, final OnForecastsReceivedListener callback) {
-        this.dbHelper = new DbHelper(context);
-        this.mCallback = callback;
-
-    }
 
     public void addWeather(WeatherDayModel weather) {
         SQLiteDatabase db = null;
@@ -87,7 +70,7 @@ public class DBManager {
     }
 
 
-    public void getAllWeatherDay() {
+    public void getAllWeatherDay(final OnForecastsReceivedListener callback) {
         SQLiteDatabase db = null;
         try {
             db = dbHelper.getReadableDatabase();
@@ -97,7 +80,7 @@ public class DBManager {
             final List<WeatherDayModel> mWeatherList=cursorToList(db,selectQuery);
 
             db.setTransactionSuccessful();
-            new Handler(Looper.getMainLooper()).post(() -> mCallback.onForecastsReceived(mWeatherList));
+            new Handler(Looper.getMainLooper()).post(() -> callback.onForecastsReceived(mWeatherList));
 
         } catch (SQLiteException e) {
             Log.v("SQLiteExeption", e.getMessage());

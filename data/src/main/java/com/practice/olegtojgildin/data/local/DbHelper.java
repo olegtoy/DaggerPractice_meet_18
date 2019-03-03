@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import javax.inject.Inject;
+
 /**
  * Created by olegtojgildin on 01/02/2019.
  */
@@ -28,6 +30,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public DbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
+
+    @Inject
     public DbHelper(Context context){
         this(context,DB_NAME,null,VERSION_DB);
     }

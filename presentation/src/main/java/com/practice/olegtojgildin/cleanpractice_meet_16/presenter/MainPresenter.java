@@ -16,21 +16,20 @@ import com.practice.olegtojgildin.domain.model.WeatherDay;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class MainPresenter<T extends MainView> {
+import javax.inject.Inject;
+
+public final class MainPresenter extends BasePresenter<MainView> {
 
 
 
-    private T mView;
     private final GetForecastsCase mGetForecastsUseCase;
 
 
+    @Inject
     public MainPresenter(final GetForecastsCase forecastsUseCase) {
         this.mGetForecastsUseCase = forecastsUseCase;
     }
 
-    public void attachView(T view) {
-        this.mView = view;
-    }
 
     public void getForecasts(final String city) {
         mView.showProgressBar();

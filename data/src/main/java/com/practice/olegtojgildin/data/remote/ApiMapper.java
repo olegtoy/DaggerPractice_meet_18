@@ -1,6 +1,7 @@
 package com.practice.olegtojgildin.data.remote;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.practice.olegtojgildin.data.OnForecastsReceivedListener;
@@ -11,6 +12,8 @@ import com.practice.olegtojgildin.data.entity.WeatherForecast;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,30 +33,21 @@ public class ApiMapper {
 
     private RetrofitHelper helper;
     private List<WeatherDayModel> mListWeather;
-    private final OnForecastsReceivedListener mCallback;
+    private  OnForecastsReceivedListener mCallback;
+    private WebService mWebService;
 
-    public ApiMapper(RetrofitHelper helper,OnForecastsReceivedListener callback) {
-        this.helper = helper;
+    @Inject
+    public ApiMapper(WebService webService) {
+       // this.helper = helper;
         mListWeather = new ArrayList<>();
+        //this.mCallback = callback;
+        mWebService=webService;
+
+    }
+    public void getForecastsRemote(@Nullable final String cityQuery, final OnForecastsReceivedListener callback) {
         this.mCallback = callback;
-
+        this.getForecastWeatherSync(cityQuery);
     }
-
-    private static volatile ApiMapper INSTANCE;
-
-    public static ApiMapper getInstance(final RetrofitHelper helper, final OnForecastsReceivedListener callback) {
-        ApiMapper instance = INSTANCE;
-        if (instance == null) {
-            synchronized (ApiMapper.class) {
-                instance = INSTANCE;
-                if (instance == null) {
-                    instance = INSTANCE = new ApiMapper(helper,callback);
-                }
-            }
-        }
-        return instance;
-    }
-
 
     public void getForecastWeatherSync(String city) {
         new RetrofitHelper().getService().getForecast("Moscow", MODE, ApiMapper.UNITS, ApiMapper.LANG, ApiMapper.API_KEY).enqueue(new Callback<WeatherForecast>() {

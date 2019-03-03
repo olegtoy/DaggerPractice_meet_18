@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.practice.olegtojgildin.data.OnForecastsReceivedListener;
 import com.practice.olegtojgildin.domain.model.WeatherDay;
 import com.practice.olegtojgildin.data.local.DBManager;
 import com.practice.olegtojgildin.data.remote.ApiMapper;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,24 +31,16 @@ import static com.practice.olegtojgildin.data.remote.ApiMapper.MODE;
 public final class ForecastsRemoteDataSource implements ForecastsDataSource {
 
     private ApiMapper mapiMapper;
-    private Context mContext;
 
-    public ForecastsRemoteDataSource(ApiMapper apiMapper,Context context) {
+    @Inject
+    public ForecastsRemoteDataSource(ApiMapper apiMapper) {
         mapiMapper = apiMapper;
-        mContext=context;
     }
 
 
-    @SuppressLint("StaticFieldLeak")
     @Override
-    public void getForecast(String city) {
-        List<WeatherDay> forecast;
+    public void getForecast(String city, final OnForecastsReceivedListener callback) {
+        mapiMapper.getForecastsRemote("Moscow", callback);
 
-        mapiMapper.getForecastWeatherSync("Moscow");
-  /*
-        DBManager dbManager = DBManager.getInstance(mContext);
-        dbManager.removeForecasts();
-        for (int i = 0; i < forecast.size(); i++)
-            dbManager.addWeather(forecast.get(i));*/
     }
 }

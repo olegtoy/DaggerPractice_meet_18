@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.practice.olegtojgildin.cleanpractice_meet_16.App;
 import com.practice.olegtojgildin.cleanpractice_meet_16.LinearSpacingItemDecoration;
 import com.practice.olegtojgildin.cleanpractice_meet_16.MainView;
 import com.practice.olegtojgildin.cleanpractice_meet_16.R;
@@ -22,26 +23,28 @@ import com.practice.olegtojgildin.domain.model.WeatherDay;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 
 public class MainActivity extends AppCompatActivity implements MainView, WeatherAdapter.OnWeatherListener {
     private RecyclerView mRecyclerView;
     private WeatherAdapter mAdapter;
     private LinearLayoutManager mManager;
     private List<WeatherDay> mListForecast;
-    private MainPresenter<MainActivity> mPresenter;
+
+    @Inject
+    MainPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ((App)getApplication()).getAppComponent().mainSubComponent().inject(this);
         initViews();
 
         mAdapter = new WeatherAdapter( MainActivity.this);
         mRecyclerView.setAdapter(mAdapter);
-        final ForecastsDataSourceFactory factory = new ForecastsDataSourceFactory(this);
-        final ForecastRepositoryImpl repository = ForecastRepositoryImpl.getInstance(factory);
-        mPresenter = new MainPresenter<>(new GetForecastsCase(repository));
+
         mPresenter.attachView(this);
         mPresenter.getForecasts("Moscow");
 

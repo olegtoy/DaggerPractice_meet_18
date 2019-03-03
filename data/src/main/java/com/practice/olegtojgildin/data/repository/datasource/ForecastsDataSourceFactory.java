@@ -13,7 +13,7 @@ import com.practice.olegtojgildin.data.remote.RetrofitHelper;
 
 
 public final class ForecastsDataSourceFactory {
-
+/*
     private final Context mContext;
 
     public ForecastsDataSourceFactory(@NonNull final Context context) {
@@ -42,5 +42,5 @@ public final class ForecastsDataSourceFactory {
     public ForecastsRemoteDataSource createRemoteDataSource(OnForecastsReceivedListener callback) {
         ApiMapper mApiMapper = new ApiMapper(new RetrofitHelper(), callback);
         return new ForecastsRemoteDataSource(mApiMapper,mContext);
-    }
+    }*/
 }
